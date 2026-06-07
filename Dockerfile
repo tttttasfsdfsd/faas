@@ -5,10 +5,12 @@ WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
-RUN npm install
 
 # Copy source
 COPY . .
+
+# Install fresh (fixes @rollup/rollup-linux-x64-musl on Alpine)
+RUN npm install
 
 # Build frontend + backend
 RUN npm run build
