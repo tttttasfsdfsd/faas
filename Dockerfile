@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
-RUN npm ci --frozen-lockfile
+RUN npm install
 
 # Copy source
 COPY . .
@@ -20,7 +20,7 @@ WORKDIR /app
 
 # Install only production dependencies
 COPY package*.json ./
-RUN npm ci --frozen-lockfile --omit=dev
+RUN npm install --omit=dev
 
 # Copy built artifacts
 COPY --from=builder /app/dist ./dist
