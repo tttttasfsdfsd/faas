@@ -230,8 +230,7 @@ function buildEnrichedContext(ctx: AnalystContext | undefined, isArabic: boolean
 ` +
         Object.entries(b).slice(0, 8).map(([k, v]) =>
           `- ${k}: منخفض ${fmt(v.low)}% | متوسط ${fmt(v.avg)}% | مرتفع ${fmt(v.high)}%`
-        ).join("
-")
+        ).join("\n")
       );
     } else {
       parts.push(`
@@ -239,8 +238,7 @@ function buildEnrichedContext(ctx: AnalystContext | undefined, isArabic: boolean
 ` +
         Object.entries(b).slice(0, 8).map(([k, v]) =>
           `- ${k}: Low ${fmt(v.low)}% | Avg ${fmt(v.avg)}% | High ${fmt(v.high)}%`
-        ).join("
-")
+        ).join("\n")
       );
     }
   }
@@ -248,14 +246,11 @@ function buildEnrichedContext(ctx: AnalystContext | undefined, isArabic: boolean
   if (ctx.historicalPeriods && ctx.historicalPeriods.length > 1) {
     const periods = ctx.historicalPeriods as Array<Record<string, unknown>>;
     const label = isArabic ? "## البيانات التاريخية (آخر الفترات):" : "## Historical Periods (recent):";
-    parts.push("
-" + label + "
-" + periods.slice(-4).map((p, i) => {
+    parts.push("\n" + label + "\n" + periods.slice(-4).map((p, i) => {
       const rev = (p.revenue as number) || 0;
       const np = (p.netIncome as number) || 0;
       return `- الفترة ${i + 1}: الإيرادات ${rev.toLocaleString()} ريال | صافي الربح ${np.toLocaleString()} ريال`;
-    }).join("
-"));
+    }).join("\n"));
   }
 
   if (ctx.earningsQualityScore != null) {
