@@ -5,12 +5,13 @@ WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
-
-# Copy source
 COPY . .
 
-# Install fresh (fixes @rollup/rollup-linux-x64-musl on Alpine)
-RUN npm install
+# حذف أي cache قديم وتثبيت نظيف مع كل الـ optional dependencies
+RUN rm -rf node_modules && \
+    npm cache clean --force && \
+    npm install --prefer-offline=false && \
+    npm install @rollup/rollup-linux-x64-musl --save-optional || true
 
 # Build frontend + backend
 RUN npm run build
@@ -20,9 +21,11 @@ FROM node:22-alpine AS production
 
 WORKDIR /app
 
-# Install only production dependencies
 COPY package*.json ./
-RUN npm install --omit=dev
+
+RUN rm -rf node_modules && \
+    npm cache clean --force && \
+    npm install --omit=dev --prefer-offline=false
 
 # Copy built artifacts
 COPY --from=builder /app/dist ./dist
